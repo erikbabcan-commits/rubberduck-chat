@@ -1,8 +1,10 @@
 import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { FeatureGrid } from './components/FeatureGrid';
 import { Footer } from './components/Footer';
+import './index.css';
 
 function App() {
   return (
@@ -17,4 +19,11 @@ function App() {
   );
 }
 
-export default App;
+const rootElement = document.getElementById('root');
+if (!rootElement) throw new Error('Failed to find the root element');
+
+ReactDOM.createRoot(rootElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
