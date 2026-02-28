@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import { Menu, X, Code2 } from 'lucide-react';
 import { Button } from './Button';
 
@@ -18,7 +18,7 @@ export const Navbar = () => {
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-bg-primary/80 backdrop-blur-xl border-b border-white/5' : 'bg-transparent'
+        isScrolled ? 'bg-bg-primary/80 backdrop-blur-xl border-b border-white/5' : 'bg-transparent border-b border-transparent'
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -37,10 +37,10 @@ export const Navbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
-          {['Features', 'How it Works', 'Pricing', 'Enterprise'].map((item) => (
+          {['Product', 'How it works', 'Security', 'Pricing', 'Docs'].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase().replace(' ', '-')}`}
+              href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
               className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
             >
               {item}
@@ -50,10 +50,7 @@ export const Navbar = () => {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <a href="#" className="text-sm font-medium text-white hover:text-accent-primary transition-colors">
-            Sign In
-          </a>
-          <Button size="sm">Get Started</Button>
+          <Button size="sm">Start fixing code</Button>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -74,10 +71,10 @@ export const Navbar = () => {
           className="md:hidden bg-bg-primary border-b border-white/5 px-6 py-8"
         >
           <div className="flex flex-col gap-6">
-            {['Features', 'How it Works', 'Pricing', 'Enterprise'].map((item) => (
+            {['Product', 'How it works', 'Security', 'Pricing', 'Docs'].map((item) => (
               <a
                 key={item}
-                href={`#${item.toLowerCase().replace(' ', '-')}`}
+                href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
                 className="text-lg font-medium text-gray-400 hover:text-white transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -85,8 +82,7 @@ export const Navbar = () => {
               </a>
             ))}
             <div className="h-px bg-white/10 my-2" />
-            <a href="#" className="text-lg font-medium text-white">Sign In</a>
-            <Button className="w-full">Get Started</Button>
+            <Button className="w-full">Start fixing code</Button>
           </div>
         </motion.div>
       )}

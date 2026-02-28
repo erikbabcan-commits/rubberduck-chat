@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { HowItWorks } from './components/HowItWorks';
 import { FeatureGrid } from './components/FeatureGrid';
+import { SecuritySection } from './components/SecuritySection';
+import { Pricing } from './components/Pricing';
+import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import './index.css';
 
@@ -12,7 +16,11 @@ function App() {
       <Navbar />
       <main>
         <Hero />
+        <HowItWorks />
         <FeatureGrid />
+        <SecuritySection />
+        <Pricing />
+        <FAQ />
       </main>
       <Footer />
     </div>
