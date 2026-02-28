@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { InteractiveDemo } from './components/InteractiveDemo';
 import { HowItWorks } from './components/HowItWorks';
 import { FeatureGrid } from './components/FeatureGrid';
 import { SecuritySection } from './components/SecuritySection';
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <main>
         <Hero />
+        <InteractiveDemo />
         <HowItWorks />
         <FeatureGrid />
         <SecuritySection />

@@ -20,6 +20,25 @@ const diffContent = [
   { type: 'context', content: '  }' },
 ];
 
+const TypewriterLine = ({ content, startDelay }: { content: string, startDelay: number }) => {
+  const [text, setText] = useState('');
+  
+  useEffect(() => {
+    const startTimeout = setTimeout(() => {
+      let i = 0;
+      const interval = setInterval(() => {
+        setText(content.slice(0, i + 1));
+        i++;
+        if (i === content.length) clearInterval(interval);
+      }, 20); // Typing speed
+      return () => clearInterval(interval);
+    }, startDelay);
+    return () => clearTimeout(startTimeout);
+  }, [content, startDelay]);
+
+  return <span>{text}</span>;
+};
+
 export const TerminalDemo = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -49,19 +68,19 @@ export const TerminalDemo = () => {
   return (
     <div className="relative w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Main Terminal */}
-      <div className="lg:col-span-2 bg-[#0F1115] rounded-xl border border-white/10 shadow-2xl overflow-hidden font-mono text-sm relative group min-h-[400px]">
+      <div className="lg:col-span-2 bg-[#0F1115] rounded-xl border border-white/10 shadow-2xl overflow-hidden font-mono text-xs md:text-sm relative group min-h-[300px] md:min-h-[400px]">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
             <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 overflow-x-auto no-scrollbar pl-4">
             {steps.map((step, index) => (
               <div 
                 key={step.id}
-                className={`flex items-center gap-2 text-xs transition-colors duration-300 ${
+                className={`flex items-center gap-2 text-[10px] md:text-xs whitespace-nowrap transition-colors duration-300 ${
                   isLoading ? 'opacity-50' :
                   index === currentStep ? 'text-accent-primary' : 
                   index < currentStep ? 'text-green-400' : 'text-gray-600'
@@ -87,12 +106,12 @@ export const TerminalDemo = () => {
         </div>
 
         {/* Content */}
-        <div className="p-6 relative bg-[#0F1115] h-full">
+        <div className="p-4 md:p-6 relative bg-[#0F1115] h-full overflow-x-auto">
           {isLoading ? (
             <div className="space-y-3 animate-pulse">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="flex gap-4">
-                  <div className="w-6 h-4 bg-white/5 rounded" />
+                  <div className="w-6 h-4 bg-white/5 rounded flex-shrink-0" />
                   <div className="h-4 bg-white/5 rounded w-full" style={{ width: `${Math.random() * 50 + 30}%` }} />
                 </div>
               ))}
@@ -104,31 +123,63 @@ export const TerminalDemo = () => {
               </div>
             </div>
           ) : (
-            <div className="space-y-1 font-mono text-sm">
+            <div className="space-y-1 font-mono text-xs md:text-sm">
               {diffContent.map((line, i) => (
-                <motion.div
+                <div
                   key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
                   className={`flex ${
                     line.type === 'add' ? 'bg-accent-primary/10 text-accent-primary' :
                     line.type === 'remove' ? 'bg-red-500/10 text-red-400' :
                     'text-gray-400'
                   }`}
                 >
-                  <span className="w-6 text-gray-600 select-none text-right pr-2">{i + 1}</span>
-                  <span className="select-none w-4 text-center opacity-50">
+                  <span className="w-6 text-gray-600 select-none text-right pr-2 flex-shrink-0">{i + 1}</span>
+                  <span className="select-none w-4 text-center opacity-50 flex-shrink-0">
                     {line.type === 'add' ? '+' : line.type === 'remove' ? '-' : ''}
                   </span>
-                  <span>{line.content}</span>
-                </motion.div>
+                  <span className="whitespace-pre">
+                    <TypewriterLine content={line.content} startDelay={i * 150} />
+                  </span>
+                </div>
               ))}
             </div>
           )}
 
-          {/* Status Overlay */}
-          {!isLoading && (
+          {/* Running Tests Overlay */}
+          <AnimatePresence>
+            {!isLoading && currentStep === 2 && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="absolute inset-0 z-10 flex items-center justify-center bg-[#0F1115]/80 backdrop-blur-sm"
+              >
+                <div className="flex flex-col items-center gap-4 p-6 bg-[#0F1115] border border-white/10 rounded-xl shadow-2xl max-w-xs w-full">
+                  <div className="relative w-12 h-12 flex items-center justify-center">
+                    <div className="absolute inset-0 border-2 border-white/10 rounded-full"></div>
+                    <div className="absolute inset-0 border-2 border-accent-primary rounded-full border-t-transparent animate-spin"></div>
+                    <Activity className="text-accent-primary" size={20} />
+                  </div>
+                  <div className="text-center w-full">
+                    <h3 className="text-white font-mono font-bold mb-1 text-sm">Running Tests...</h3>
+                    <p className="text-gray-400 text-[10px] font-mono mb-3">Executing test suite (3/12)</p>
+                    {/* Progress Bar */}
+                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                      <motion.div 
+                        className="h-full bg-accent-primary"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 4, ease: "linear" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Status Overlay (Bottom Right) */}
+          {!isLoading && currentStep !== 2 && (
             <div className="absolute bottom-6 right-6">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -138,17 +189,8 @@ export const TerminalDemo = () => {
                   exit={{ opacity: 0, y: -10 }}
                   className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-gray-300 backdrop-blur-md"
                 >
-                  {currentStep === 2 ? (
-                    <>
-                      <span className="w-2 h-2 rounded-full bg-accent-primary animate-pulse" />
-                      Running tests...
-                    </>
-                  ) : (
-                    <>
-                      <TerminalIcon size={12} />
-                      <span>Processing {steps[currentStep].label}...</span>
-                    </>
-                  )}
+                  <TerminalIcon size={12} />
+                  <span>Processing {steps[currentStep].label}...</span>
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -230,3 +272,4 @@ export const TerminalDemo = () => {
     </div>
   );
 };
+

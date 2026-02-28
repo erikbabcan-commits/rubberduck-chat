@@ -68,7 +68,7 @@ export const Navbar = () => {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-bg-primary border-b border-white/5 px-6 py-8"
+          className="md:hidden bg-bg-primary/95 backdrop-blur-xl border-b border-white/5 px-6 py-8 absolute top-20 left-0 right-0 shadow-2xl"
         >
           <div className="flex flex-col gap-6">
             {['Product', 'How it works', 'Security', 'Pricing', 'Docs'].map((item) => (
