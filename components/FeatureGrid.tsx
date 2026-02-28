@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Shield, Code, GitBranch, Cpu, Layers, ArrowUpRight } from 'lucide-react';
+import { Zap, Shield, Code, GitBranch, Cpu, ArrowUpRight } from 'lucide-react';
 
 const features = [
   {
@@ -39,11 +39,11 @@ export const FeatureGrid = () => {
   return (
     <section id="features" className="py-24 px-6 relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-16 text-center">
+        <div className="mb-20 text-center">
           <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-            Surgical Precision for <span className="text-accent-primary">Messy Codebases</span>
+            Surgical Precision for <span className="text-white">Messy Codebases</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-400 max-w-xl mx-auto text-lg leading-relaxed">
             Built for engineering teams that ship fast and break things. We fix them before users notice.
           </p>
         </div>
@@ -56,21 +56,21 @@ export const FeatureGrid = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className={`relative group p-8 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300 ${feature.colSpan}`}
+              className={`relative group p-8 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 ${feature.colSpan}`}
             >
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <ArrowUpRight className="text-accent-primary w-5 h-5" />
               </div>
               
-              <div className="w-12 h-12 rounded-lg bg-accent-primary/10 flex items-center justify-center mb-6 text-accent-primary group-hover:scale-110 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 text-gray-400 group-hover:text-accent-primary group-hover:bg-accent-primary/10 transition-all duration-300">
                 <feature.icon size={24} />
               </div>
               
-              <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-accent-primary transition-colors">
+              <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-white transition-colors">
                 {feature.title}
               </h3>
               
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-gray-400 leading-relaxed max-w-sm group-hover:text-gray-300 transition-colors">
                 {feature.description}
               </p>
             </motion.div>

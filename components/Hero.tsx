@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Github } from 'lucide-react';
+import { ArrowRight, Github, Sparkles } from 'lucide-react';
 import { Button } from './Button';
-import { Terminal } from './Terminal';
+import { Terminal, scenarios } from './Terminal';
 
 export const Hero = () => {
+  const [activeScenario, setActiveScenario] = useState(scenarios[0].id);
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 px-6 overflow-hidden">
       {/* Background Elements */}
@@ -20,7 +22,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-8 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-accent-primary"
+          className="mb-8 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-300"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-primary opacity-75"></span>
@@ -47,7 +49,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-lg md:text-xl text-gray-400 max-w-2xl mb-10 leading-relaxed"
+          className="text-lg md:text-xl text-gray-400 max-w-xl mb-10 leading-relaxed"
         >
           Stop wasting time on syntax errors and race conditions. 
           RubberDuck analyzes your repo, identifies bugs, and opens PRs with fixes automatically.
@@ -58,7 +60,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center gap-4 mb-20"
+          className="flex flex-col sm:flex-row items-center gap-4 mb-16"
         >
           <Button size="lg" className="w-full sm:w-auto group">
             Start Free Trial 
@@ -70,9 +72,42 @@ export const Hero = () => {
           </Button>
         </motion.div>
 
+        {/* Example Prompts */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="flex flex-wrap justify-center gap-3 mb-12 max-w-3xl"
+        >
+          {scenarios.map((scenario) => (
+            <button
+              key={scenario.id}
+              onClick={() => setActiveScenario(scenario.id)}
+              className={`
+                relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border
+                flex items-center gap-2
+                ${activeScenario === scenario.id 
+                  ? 'bg-accent-primary/10 border-accent-primary text-accent-primary shadow-[0_0_15px_rgba(255,215,0,0.2)]' 
+                  : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/20'
+                }
+              `}
+            >
+              {activeScenario === scenario.id && (
+                <motion.span 
+                  layoutId="active-sparkle"
+                  className="text-accent-primary"
+                >
+                  <Sparkles size={14} />
+                </motion.span>
+              )}
+              {scenario.name}
+            </button>
+          ))}
+        </motion.div>
+
         {/* Terminal Demo */}
         <div className="w-full max-w-5xl">
-          <Terminal />
+          <Terminal activeScenarioId={activeScenario} />
         </div>
       </div>
     </section>
